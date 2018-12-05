@@ -25,7 +25,3 @@
 # Cache
 *cmake-build-debug
 *.idea
-
-# Go module
-*go.mod
-*go.sum
