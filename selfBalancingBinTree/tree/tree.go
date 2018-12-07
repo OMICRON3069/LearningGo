@@ -1,24 +1,24 @@
 package tree
 
 // define a simple tree struct
-type sucker struct {
+type Sucker struct {
 	value                  int
-	parent, lChild, rChild *sucker
+	parent, lChild, rChild *Sucker
 }
 
 // this thing are kind like enum in C/C++
-type Born int
+type born int
 
 const (
-	LEFT  Born = 0
-	RIGHT Born = 1
+	LEFT  born = 0
+	RIGHT born = 1
 )
 
 // plug this node into it's parent's arm
-func (s *sucker) initNode(num int, up *sucker, local Born) {
+func (s *Sucker) InitNode(num int, up *Sucker, local born) {
 	s.value = num
 	s.parent = up
-	// as mentioned in golang tutor
+	// as mentioned in golang tour
 	// use switch to replace else if
 	switch {
 	case local == LEFT:
@@ -31,31 +31,31 @@ func (s *sucker) initNode(num int, up *sucker, local Born) {
 	s.rChild, s.lChild = nil, nil
 }
 
-// use recursive method travel all node
+// use recursive method Travel all node
 // hand function can
-func (s *sucker) travel(hand func(*sucker) Born) {
+func (s *Sucker) Travel(hand func(*Sucker) born) {
 	chick := hand(s)
 	switch {
 	case chick == LEFT:
 		// left, then right
 		if s.lChild.isNotNil() {
-			s.lChild.travel(hand)
+			s.lChild.Travel(hand)
 		}
 		if s.rChild.isNotNil() {
-			s.rChild.travel(hand)
+			s.rChild.Travel(hand)
 		}
 	case chick == RIGHT:
 		if s.rChild.isNotNil() {
-			s.rChild.travel(hand)
+			s.rChild.Travel(hand)
 		}
 		if s.lChild.isNotNil() {
-			s.lChild.travel(hand)
+			s.lChild.Travel(hand)
 		}
 		// TODO: I need an error handler to fill "default", might same as above
 	}
 }
 
 // this method can help me to stop traveling while reach the end
-func (s *sucker) isNotNil() bool {
+func (s *Sucker) isNotNil() bool {
 	return s != nil
 }
