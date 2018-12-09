@@ -6,6 +6,11 @@ type Sucker struct {
 	Parent, LChild, RChild *Sucker
 }
 
+/*
+	I'm considering to add a variable to log the element's position in array/slice
+	which can help me to delete/release a node in tree
+ */
+
 // this thing are kind like enum in C/C++
 type Born int
 
