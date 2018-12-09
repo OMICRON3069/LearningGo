@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"selfBalancingBinTree/tree"
 )
 
@@ -16,16 +17,20 @@ func start(warehouse []*tree.Sucker, coco ...int) {
 	for _, v := range coco {
 		if warehouse == nil {
 			//fmt.Println("nil warehouse")
-			warehouse = append(warehouse, make([]*tree.Sucker, 1)...)
+			warehouse = append(warehouse, tmp)
 			initWarehouse(warehouse, v, tmp)
 			tmp = nil
 			continue
 		}
 		tmp = new(tree.Sucker)
-		warehouse = append(warehouse, make([]*tree.Sucker, 1)...)
+		// I don'y know why the cap() of slice will not follow my order to extend
+		// so the ugly workaround is append tmp first then change it in function call
+		warehouse = append(warehouse, tmp)
 		adder(warehouse, tmp, v)
 		tmp = nil
 	}
+	// break point here and check the slice
+	fmt.Println(warehouse)
 }
 
 // an ugly workaround for so call slice are reference type of array
@@ -41,26 +46,30 @@ func initWarehouse(warehouse []*tree.Sucker, value int, goods *tree.Sucker) {
 
 func adder(warehouse []*tree.Sucker, goods *tree.Sucker, value int) {
 	// TODO: error handling
-	var (
-		pos tree.Born
-		up  *tree.Sucker
-	)
+
+	// I must be a dumb ass
+	// init pos with NULL to avoid further error
+	pos := tree.NULL
+	var up *tree.Sucker
+
 	// function start
 	vCheck := func(current *tree.Sucker) tree.Born {
 		switch { // complex logical operation goes here
 		case value < current.Value:
 			if current.LChild == nil {
 				up = current
+				pos = tree.LEFT
 				return tree.NULL
 			} else {
-				return tree.LEFT
+				return tree.LeftOnly
 			}
 		case value > current.Value:
 			if current.RChild == nil {
 				up = current
+				pos = tree.RIGHT
 				return tree.NULL
 			} else {
-				return tree.RIGHT
+				return tree.RightOnly
 			}
 		}
 		return tree.NULL
@@ -70,7 +79,7 @@ func adder(warehouse []*tree.Sucker, goods *tree.Sucker, value int) {
 	goods.InitNode(value, up, pos)
 
 	// add good to warehouse,
-	warehouse[cap(warehouse)-1] = goods
+	//warehouse[cap(warehouse)-1] = goods
 }
 
 /*

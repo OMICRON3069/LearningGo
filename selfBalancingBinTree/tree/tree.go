@@ -9,15 +9,17 @@ type Sucker struct {
 /*
 	I'm considering to add a variable to log the element's position in array/slice
 	which can help me to delete/release a node in tree
- */
+*/
 
 // this thing are kind like enum in C/C++
 type Born int
 
 const (
-	LEFT  Born = 0
-	RIGHT Born = 1
-	NULL  Born = 9
+	LEFT      Born = 0
+	RIGHT     Born = 1
+	NULL      Born = 9
+	LeftOnly  Born = 2
+	RightOnly Born = 3
 )
 
 // plug this node into it's Parent's arm
@@ -38,7 +40,7 @@ func (s *Sucker) InitNode(num int, up *Sucker, local Born) {
 }
 
 // use recursive method Travel all node
-// hand function can
+// hand function are like a hand, can do anything during travel
 func (s *Sucker) Travel(hand func(*Sucker) Born) {
 	chick := hand(s)
 	switch {
@@ -47,18 +49,27 @@ func (s *Sucker) Travel(hand func(*Sucker) Born) {
 		if s.LChild.isNotNil() {
 			s.LChild.Travel(hand)
 		}
-		if s.RChild.isNotNil() {
+		if s.RChild.isNotNil() && chick != NULL {
 			s.RChild.Travel(hand)
 		}
 	case chick == RIGHT:
 		if s.RChild.isNotNil() {
 			s.RChild.Travel(hand)
 		}
+		if s.LChild.isNotNil() && chick != NULL {
+			s.LChild.Travel(hand)
+		}
+	case chick == LeftOnly:
+		// only left
 		if s.LChild.isNotNil() {
 			s.LChild.Travel(hand)
 		}
+	case chick == RightOnly:
+		if s.RChild.isNotNil() {
+			s.RChild.Travel(hand)
+		}
 	case chick == NULL:
-		// do nothing, continue recursive travel
+		// do nothing, exit current function call and continue recursive travel
 
 		// TODO: I need an error handler to fill "default", might same as above
 	}
