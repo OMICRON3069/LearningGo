@@ -21,6 +21,8 @@ func start(warehouse []*tree.Sucker, coco ...int) {
 			tmp = nil
 			continue
 		}
+		tmp = new(tree.Sucker)
+		warehouse = append(warehouse,make([]*tree.Sucker,1)...)
 		adder(warehouse, tmp, v)
 		tmp = nil
 	}
