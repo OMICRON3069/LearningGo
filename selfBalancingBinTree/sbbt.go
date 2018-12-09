@@ -16,22 +16,25 @@ func start(warehouse []*tree.Sucker, coco ...int) {
 	for _, v := range coco {
 		if warehouse == nil {
 			//fmt.Println("nil warehouse")
-			warehouse = append(warehouse,make([]*tree.Sucker,1)...)
+			warehouse = append(warehouse, make([]*tree.Sucker, 1)...)
 			initWarehouse(warehouse, v, tmp)
 			tmp = nil
 			continue
 		}
+		tmp = new(tree.Sucker)
+		warehouse = append(warehouse, make([]*tree.Sucker, 1)...)
 		adder(warehouse, tmp, v)
 		tmp = nil
 	}
 }
 
+// an ugly workaround for so call slice are reference type of array
 func initWarehouse(warehouse []*tree.Sucker, value int, goods *tree.Sucker) {
 	// due to limit of init method
 	// must give the value to variable manually
 	goods.Parent, goods.LChild, goods.RChild, goods.Value = nil, nil, nil, value
 
-	warehouse [0]=goods
+	warehouse[0] = goods
 
 	// TODO: error handling
 }
@@ -42,6 +45,7 @@ func adder(warehouse []*tree.Sucker, goods *tree.Sucker, value int) {
 		pos tree.Born
 		up  *tree.Sucker
 	)
+	// function start
 	vCheck := func(current *tree.Sucker) tree.Born {
 		switch { // complex logical operation goes here
 		case value < current.Value:
@@ -61,10 +65,12 @@ func adder(warehouse []*tree.Sucker, goods *tree.Sucker, value int) {
 		}
 		return tree.NULL
 	}
+
 	warehouse[0].Travel(vCheck)
 	goods.InitNode(value, up, pos)
 
-	// TODO: add new node to slice
+	// add good to warehouse,
+	warehouse[cap(warehouse)-1] = goods
 }
 
 /*
