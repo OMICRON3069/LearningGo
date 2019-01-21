@@ -27,6 +27,7 @@ func start(warehouse []*tree.Sucker, coco ...int) {
 		// so the ugly workaround is append tmp first then change it in function call
 		warehouse = append(warehouse, tmp)
 		adder(warehouse, tmp, v)
+		balanceCheck(warehouse)
 		tmp = nil
 	}
 	// break point here and check the slice
@@ -82,8 +83,14 @@ func adder(warehouse []*tree.Sucker, goods *tree.Sucker, value int) {
 	//warehouse[cap(warehouse)-1] = goods
 }
 
-/*
 func balanceCheck(warehouse []*tree.Sucker) {
 	// TODO: error handling
+
+	bFactor := func(current *tree.Sucker) tree.Born {
+
+		return tree.NULL
+	}
+
+	warehouse[0].Travel(bFactor)
 }
-*/
+
